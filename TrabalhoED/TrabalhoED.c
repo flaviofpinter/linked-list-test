@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdbool.h>
 typedef struct list {
     int value;
     struct list* next;
@@ -14,6 +15,7 @@ void printList(list* head) {
 }
 
 void insert(list* head, int val) {
+    head = (list*) malloc(sizeof(list));
     list* current = head;
     while (current->next != NULL) {
         current = current->next;
@@ -81,22 +83,48 @@ int removeByIndex(list** head, int n) {
 
     return retvalue;
 }
+bool isEmpty(list** head) {
+    if(*head == NULL){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 
 void main(){
     list* head = NULL;
-    head = (list*) malloc(sizeof(list));
-    if (head == NULL) {
-        return 1;
-    } else{
-        head->value = 1;
-        head->next = NULL;
-    }
+    int v;
+    int opt = menu();
+    switch (opt) {
+        case 2:
+            if (isEmpty(&head)) {
+                printf("Digite o valor inicial: "); scanf_s("%d", &v);
+                head = (list*)malloc(sizeof(list));
+                head->value = v;
+                head->next = NULL;
+                printf("%d", head->value);
+            }
+            else {
+                printf("Digite o valor: "); scanf_s("%d", &v);
+                insert(head, v);
+                printList(head);
+            }
+        break;
+        case 3:
+            printf("Removendo...");
+            removeLast(head);
+            printList(head);
+        break;
+        case 4:
+            printList(head);
+        break;
 
-    insert(head, 4);
-    insert(head, 5);
-    insert(head, 7);
-    removeByIndex(&head, 2);
-    printList(head);
+    }
+    //insert(head, 4);
+    //insert(head, 5);
+    //removeByIndex(&head, 2);
 }
 
 int menu()
@@ -113,3 +141,6 @@ int menu()
 
     return input;
 }
+
+// falta 1, 5, 6, 7
+// revisar/melhorar 4
