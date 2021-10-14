@@ -7,7 +7,7 @@ typedef struct list {
 
 void printList(list* head) {
     list* current = head;
-
+    printf("\n");
     while (current != NULL) {
         printf("%d\n", current->value);
         current = current->next;
@@ -19,11 +19,12 @@ void insert(list* head, int val) {
     list* current = head;
     while (current->next != NULL) {
         current = current->next;
+        printf("IAI");
     }
     current->next = (list*) malloc(sizeof(list));
     current->next->value = val;
     current->next->next = NULL;
-;}
+}
 
 int pop(list** head) {
     int retvalue = -1;
@@ -83,6 +84,29 @@ int removeByIndex(list** head, int n) {
 
     return retvalue;
 }
+
+int getByIndex(list* head, int n) {
+    list* current = head;
+    int index = 0;
+    while (current != NULL) {
+        if (index == n) {
+            return (current->value);
+        }
+        index++;
+        current = current->next;
+    }
+}
+
+int length(list* head) {
+    list* current = head;
+    int count = 0;
+    while (current != NULL) {
+        current = current->next;
+        count++;
+    }
+    return count;
+}
+
 bool isEmpty(list** head) {
     if(*head == NULL){
         return true;
@@ -96,12 +120,15 @@ bool isEmpty(list** head) {
 void main(){
     list* head = NULL;
     int v;
-    int opt = menu();
-    switch (opt) {
+    bool r = true;
+    int i;
+    while (r) {
+        int opt = menu();
+        switch (opt) {
         case 2:
             if (isEmpty(&head)) {
                 printf("Digite o valor inicial: "); scanf_s("%d", &v);
-                head = (list*)malloc(sizeof(list));
+                head = (list*) malloc(sizeof(list));
                 head->value = v;
                 head->next = NULL;
                 printf("%d", head->value);
@@ -115,23 +142,28 @@ void main(){
         case 3:
             printf("Removendo...");
             removeLast(head);
-            printList(head);
-        break;
+            break;
         case 4:
             printList(head);
         break;
-
+        case 5:
+            printf("Digite o index para busca: "); scanf_s("%d", &i);
+            printf("\n Valor: %d", getByIndex(head, i));
+        break;
+        case 6:
+            printf("Tamanho da lista : % d", length(head));
+        break;
+        case 7:
+            printf("Encerrando...");
+            r = false;
+        }
     }
-    //insert(head, 4);
-    //insert(head, 5);
-    //removeByIndex(&head, 2);
 }
 
 int menu()
 {
     int input;
-    printf("1 - Iniciar/Reiniciar\n");
-    printf("2 - Inserir\n");
+    printf("\n2 - Inserir\n");
     printf("3 - Excluir\n");
     printf("4 - Imprimir\n");
     printf("5 - Buscar\n");
@@ -141,6 +173,4 @@ int menu()
 
     return input;
 }
-
-// falta 1, 5, 6, 7
-// revisar/melhorar 4
+// métodos que encerram tudo inesperadamente, print e insert
