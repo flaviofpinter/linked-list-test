@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<stdbool.h>
 typedef struct list {
     int value;
@@ -14,16 +15,17 @@ void printList(list* head) {
     }
 }
 
-void insert(list* head, int val) {
-    head = (list*) malloc(sizeof(list));
-    list* current = head;
+void insert(list** head, int val) {
+    list* newItem = malloc(sizeof(list));
+    newItem->value = val;
+    newItem->next = NULL;
+    list* current = *head;
+    
     while (current->next != NULL) {
         current = current->next;
-        printf("IAI");
     }
-    current->next = (list*) malloc(sizeof(list));
-    current->next->value = val;
-    current->next->next = NULL;
+
+    current->next = newItem;
 }
 
 int pop(list** head) {
@@ -34,6 +36,7 @@ int pop(list** head) {
         return -1;
     }
 
+
     nextItem = (*head)->next;
     retvalue = (*head)->value;
     free(*head);
@@ -42,48 +45,43 @@ int pop(list** head) {
     return retvalue;
 }
 
-int removeLast(list* head) {
-    int retvalue = 0;
+void removeLast(list* head) {
     if (head->next == NULL) {
-        retvalue = head->value;
         free(head);
-        return retvalue;
     }
 
     list* current = head;
     while (current->next->next != NULL) {
         current = current->next;
     }
-
-    retvalue = current->next->value;
+    
     free(current->next);
     current->next = NULL;
-    return retvalue;
 }
-
-int removeByIndex(list** head, int n) {
-    int i = 0;
-    int retvalue = -1;
-    list* current = *head;
-    list* temp = NULL;
-
-    if (n == 0) {
-        return pop(&head);
-    }
-
-    for (i = 0; i < n - 1;i++) {
-        if (current->next == NULL) {
-            return -1;
-        }
-        current = current->next;
-    }
-
-    temp = current->next;
-    retvalue = current->next->value;
-    free(current->next);
-
-    return retvalue;
-}
+//     TESTE
+//int removeByIndex(list** head, int n) {
+//    int i = 0;
+//    int retvalue = -1;
+//    list* current = *head;
+//    list* temp = NULL;
+//
+//    if (n == 0) {
+//        return pop(&head);
+//    }
+//
+//    for (i = 0; i < n - 1;i++) {
+//        if (current->next == NULL) {
+//            return -1;
+//        }
+//        current = current->next;
+//    }
+//
+//    temp = current->next;
+//    retvalue = current->next->value;
+//    free(current->next);
+//
+//    return retvalue;
+//}
 
 int getByIndex(list* head, int n) {
     list* current = head;
@@ -122,10 +120,11 @@ void main(){
     int v;
     bool r = true;
     int i;
+    printf("----------------MENU----------------");
     while (r) {
         int opt = menu();
         switch (opt) {
-        case 2:
+        case 1:
             if (isEmpty(&head)) {
                 printf("Digite o valor inicial: "); scanf_s("%d", &v);
                 head = (list*) malloc(sizeof(list));
@@ -135,26 +134,35 @@ void main(){
             }
             else {
                 printf("Digite o valor: "); scanf_s("%d", &v);
-                insert(head, v);
+                insert(&head, v);
                 printList(head);
             }
         break;
-        case 3:
-            printf("Removendo...");
-            removeLast(head);
+        case 2:
+            if (head == NULL) {
+                printf("\nA lista esta vazia!!\n");
+                break;
+            } else if (head->next == NULL) {
+                pop(&head);
+                printf("\nA lista esta vazia agora\n");
+
+            } else {
+                printf("\nRemovendo...\n");
+                removeLast(head);
+            }
             break;
-        case 4:
+        case 3:
             printList(head);
         break;
+        case 4:
+            printf("\nDigite o index para busca: "); scanf_s("%d", &i);
+            printf("\n Valor: %d\n", getByIndex(head, i));
+        break;
         case 5:
-            printf("Digite o index para busca: "); scanf_s("%d", &i);
-            printf("\n Valor: %d", getByIndex(head, i));
+            printf("\nTamanho da lista : %d\n", length(head));
         break;
         case 6:
-            printf("Tamanho da lista : % d", length(head));
-        break;
-        case 7:
-            printf("Encerrando...");
+            printf("\nEncerrando...\n");
             r = false;
         }
     }
@@ -163,13 +171,13 @@ void main(){
 int menu()
 {
     int input;
-    printf("\n2 - Inserir\n");
-    printf("3 - Excluir\n");
-    printf("4 - Imprimir\n");
-    printf("5 - Buscar\n");
-    printf("6 - Nr. de Elementos\n");
-    printf("7 - Fim\n");
-    printf("A opção selecionada: "); scanf_s("%d", &input);
+    printf("\n1 - Inserir\n");
+    printf("2 - Excluir\n");
+    printf("3 - Imprimir\n");
+    printf("4 - Buscar\n");
+    printf("5 - Nr. de Elementos\n");
+    printf("6 - Fim\n");
+    printf("A opcao selecionada: "); scanf_s("%d", &input);
 
     return input;
 }
