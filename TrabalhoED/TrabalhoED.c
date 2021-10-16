@@ -10,7 +10,7 @@ void printList(list* head) {
     list* current = head;
     printf("\n");
     while (current != NULL) {
-        printf("%d\n", current->value);
+        printf("%d ", current->value);
         current = current->next;
     }
 }
@@ -116,56 +116,10 @@ bool isEmpty(list** head) {
 
 
 void main(){
-    list* head = NULL;
-    int v;
-    bool r = true;
-    int i;
-    printf("----------------MENU----------------");
-    while (r) {
-        int opt = menu();
-        switch (opt) {
-        case 1:
-            if (isEmpty(&head)) {
-                printf("Digite o valor inicial: "); scanf_s("%d", &v);
-                head = (list*) malloc(sizeof(list));
-                head->value = v;
-                head->next = NULL;
-                printf("%d", head->value);
-            }
-            else {
-                printf("Digite o valor: "); scanf_s("%d", &v);
-                insert(&head, v);
-                printList(head);
-            }
-        break;
-        case 2:
-            if (head == NULL) {
-                printf("\nA lista esta vazia!!\n");
-                break;
-            } else if (head->next == NULL) {
-                pop(&head);
-                printf("\nA lista esta vazia agora\n");
+    
 
-            } else {
-                printf("\nRemovendo...\n");
-                removeLast(head);
-            }
-            break;
-        case 3:
-            printList(head);
-        break;
-        case 4:
-            printf("\nDigite o index para busca: "); scanf_s("%d", &i);
-            printf("\n Valor: %d\n", getByIndex(head, i));
-        break;
-        case 5:
-            printf("\nTamanho da lista : %d\n", length(head));
-        break;
-        case 6:
-            printf("\nEncerrando...\n");
-            r = false;
-        }
-    }
+    printf("----------------MENU----------------");
+    exec();
 }
 
 int menu()
@@ -181,4 +135,56 @@ int menu()
 
     return input;
 }
-// métodos que encerram tudo inesperadamente, print e insert
+
+int exec(){
+    int v;
+    bool r = true;
+    int i;
+    list* head = NULL;
+    while (r) {
+        int opt = menu();
+        switch (opt) {
+        case 1:
+            if (isEmpty(&head)) {
+                printf("Digite o valor inicial: "); scanf_s("%d", &v);
+                head = (list*)malloc(sizeof(list));
+                head->value = v;
+                head->next = NULL;
+                //printf("%d", head->value);
+            }
+            else {
+                printf("Digite o valor: "); scanf_s("%d", &v);
+                insert(&head, v);
+            }
+            break;
+        case 2:
+            if (head == NULL) {
+                printf("\nA lista esta vazia!!\n");
+                break;
+            }
+            else if (head->next == NULL) {
+                pop(&head);
+                printf("\nA lista esta vazia agora\n");
+
+            }
+            else {
+                printf("\nRemovendo...\n");
+                removeLast(head);
+            }
+            break;
+        case 3:
+            printList(head);
+            break;
+        case 4:
+            printf("\nDigite o index do valor que deseja buscar: "); scanf_s("%d", &i);
+            printf("\n Valor: %d\n", getByIndex(head, i));
+            break;
+        case 5:
+            printf("\nTamanho da lista : %d\n", length(head));
+            break;
+        case 6:
+            printf("\nEncerrando...\n");
+            r = false;
+        }
+    }
+}
